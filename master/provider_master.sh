@@ -45,6 +45,28 @@ permission_user(){
 }
 
 # Installation de gradle
+install_gradle(){
+	VERSION=7.0
+	wget https://downloads.gradle-dn.com/distributions/gradle-${VERSION}-bin.zip -P /tmp
+
+	unzip -d /opt/gradle /tmp/gradle-${VERSION}-bin.zip
+
+	# Faire pointer le lien vers la dernière version de gradle
+
+	ln -s /opt/gradle/gradle-${VERSION} /opt/gradle/latest
+
+	# Ajout de gradle au PATH
+
+	touch /etc/profile.d/gradle.sh
+
+	echo "export PATH=/opt/gradle/latest/bin:${PATH}" > /etc/profile.d/gradle.sh
+
+	chmod +x /etc/profile.d/gradle.sh
+
+	source /etc/profile.d/gradle.sh
+}
+
+# Installation d'Ansible
 source_ansible() {
 	    if ! test -f /etc/apt/source.list.d/ansible.list ; then
         sh -c 'echo deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main/ > \
@@ -63,6 +85,16 @@ install_webhook(){
 
 ##Main
 
+# On installe le pare-feu
+install_package "ufw"
+
+# On le met en route
+ufw --force enable 
+
+# On lui fixe de nouvelles regles
+ufw allow ssh
+ufw allow 8080
+
 # On prepare l'installation de jenkins
 echo "${GREEN}$(date +'%Y-%m-%d %H:%M:%S') [ INFO  ] : Installation des prérequis Jenkins et du webhook relay ... ${NC}"
 apt-get -y update
@@ -74,6 +106,7 @@ install_package "python3"
 install_package "python3-pip"
 install_package "python3-venv"
 
+install_gradle
 install_webhook
 
 # On installe jenkins suivant les preconisations du site
@@ -97,11 +130,6 @@ echo "userjob:userjob" | passw.rd
 echo "${GREEN}$(date +'%Y-%m-%d %H:%M:%S') [ INFO  ] : Application des permisions user Jenkins ... ${NC}"
 permission_user
 
-# On affiche le mot de passe de jenkins
-sleep 30s
-echo "${GREEN}$(date +'%Y-%m-%d %H:%M:%S') [ INFO  ] : Mot de passe jenkins ... ${NC}"
-cat /var/lib/jenkins/secrets/initialAdminPassword | xargs echo
-
 # On sauvegarde le fichier sshd_config
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bck
 
@@ -118,4 +146,14 @@ source_ansible
 apt-get update
 install_package "ansible"
 
+# Affiche la fin du déploiement de la machine Master
 echo "${GREEN}$(date +'%Y-%m-%d %H:%M:%S') [ INFO  ] : Déploiement machine Master Terminé ${NC}"
+
+# Affiche les version de jenkins et ansible
+echo "${GREEN}$(date +'%Y-%m-%d %H:%M:%S') [ INFO  ] : Version d'Ansible ${NC}"
+ansible --version
+
+
+# On affiche le mot de passe de jenkins
+echo "${GREEN}$(date +'%Y-%m-%d %H:%M:%S') [ INFO  ] : Mot de passe jenkins ... ${NC}"
+cat /var/lib/jenkins/secrets/initialAdminPassword | xargs echo

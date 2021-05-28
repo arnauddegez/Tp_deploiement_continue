@@ -1,2 +1,13 @@
 .vscode/settings.json
 
+master/.vagrant/machines/master/virtualbox/action_provision
+master/.vagrant/machines/master/virtualbox/action_set_name
+master/.vagrant/machines/master/virtualbox/box_meta
+master/.vagrant/machines/master/virtualbox/creator_uid
+master/.vagrant/machines/master/virtualbox/id
+master/.vagrant/machines/master/virtualbox/index_uuid
+master/.vagrant/machines/master/virtualbox/private_key
+master/.vagrant/machines/master/virtualbox/synced_folders
+master/.vagrant/machines/master/virtualbox/vagrant_cwd
+master/.vagrant/rgloader/loader.rb
+master/ubuntu-bionic-18.04-cloudimg-console.log
