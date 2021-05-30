@@ -2,8 +2,21 @@
 
 ## Lancement de la machine distance slave1
 
-###Prérequis :
+#### Rappel : 
+
+-   Slave1 : 192.168.40.20
+
+### Prérequis :
 
 - Vagrant
 
+#### Commande lancement :
+
 ```console
+Tp_deploiement_continue/slave1 (main)$ vagrant up
+```
+
+
+
+
+
