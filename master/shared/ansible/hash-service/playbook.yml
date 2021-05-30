@@ -1,0 +1,7 @@
+-
+  name: Docker Install + container
+  hosts: ubuntu
+  become: yes # become_user: root
+  roles:
+    - docker
+ 
